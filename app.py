@@ -1,14 +1,17 @@
 import streamlit as st
 
-# Set up the web page title and description
-st.title("🔐 Crypto Challenge: Chosen Plaintext Attack")
-st.write("Your goal is to figure out the secret keys by entering different plaintexts and analyzing the resulting ciphertexts!")
+st.title("🔐 Crypto Challenge: Protected Keys")
 
 # -------------------------------------------------------------
-# SECRET KEYS (Completely hidden from students on the web app)
+# FETCHING HIDDEN KEYS FROM STREAMLIT SECRETS 
+# (Students cannot see these, even if your GitHub repo is public!)
 # -------------------------------------------------------------
-SECRET_CAESAR_SHIFT = 7
-SECRET_VIGENERE_KEY = "MATH"
+try:
+    SECRET_CAESAR_SHIFT = int(st.secrets["CAESAR_KEY"])
+    SECRET_VIGENERE_KEY = st.secrets["VIGENERE_KEY"].upper()
+except Exception:
+    st.error("⚠️ Setup Error: Secrets are not configured in the Streamlit Dashboard yet.")
+    st.stop()
 
 # -------------------------------------------------------------
 # HELPER FUNCTIONS
@@ -25,7 +28,6 @@ def caesar_encrypt(text, shift):
 
 def vigenere_encrypt(text, key):
     result = []
-    key = key.upper()
     key_index = 0
     for char in text:
         if char.isalpha():
@@ -38,49 +40,44 @@ def vigenere_encrypt(text, key):
     return "".join(result)
 
 # -------------------------------------------------------------
-# USER INTERFACE (What your students actually see)
+# USER INTERFACE
 # -------------------------------------------------------------
-
-# Tab layout to separate the two challenges
 tab1, tab2 = st.tabs(["Level 1: Caesar Cipher", "Level 2: Vigenère Cipher"])
 
 with tab1:
     st.header("Level 1: Find the Shift Key")
-    st.write("Enter text below to see how the system encrypts it.")
-    
-    # Input field for students
     user_plaintext_1 = st.text_input("Enter Plaintext:", placeholder="Type here...", key="caesar_in")
     
     if user_plaintext_1:
-        # Encrypt using the hidden shift key
-        ciphertext_1 = caesar_encrypt(user_plaintext_1, SECRET_CAESAR_SHIFT)
-        st.info(f"**Ciphertext Output:** `{ciphertext_1}`")
+        if len(user_plaintext_1.strip()) < 5 or set(user_plaintext_1.upper().replace(" ", "")) == {'A'}:
+            st.warning("⚠️ Shortcut blocked! Please enter a real word or phrase (min 5 chars).")
+        else:
+            ciphertext_1 = caesar_encrypt(user_plaintext_1, SECRET_CAESAR_SHIFT)
+            st.info(f"**Ciphertext Output:** `{ciphertext_1}`")
         
-    # Verification section
     st.divider()
     student_guess_1 = st.number_input("Think you found the key? Enter the shift number:", min_value=0, max_value=25, value=0)
     if st.button("Verify Caesar Key"):
         if student_guess_1 == SECRET_CAESAR_SHIFT:
             st.success("🎉 Correct! You cracked the Caesar shift!")
         else:
-            st.error("❌ Not quite. Keep analyzing the inputs and outputs!")
+            st.error("❌ Not quite. Keep analyzing!")
 
 with tab2:
     st.header("Level 2: Find the Keyword")
-    st.write("This algorithm shifts letters based on a repeating keyword.")
-    
     user_plaintext_2 = st.text_input("Enter Plaintext:", placeholder="Type here...", key="vig_in")
     
     if user_plaintext_2:
-        # Encrypt using the hidden word key
-        ciphertext_2 = vigenere_encrypt(user_plaintext_2, SECRET_VIGENERE_KEY)
-        st.info(f"**Ciphertext Output:** `{ciphertext_2}`")
+        if len(user_plaintext_2.strip()) < 6 or set(user_plaintext_2.upper().replace(" ", "")) == {'A'}:
+            st.warning("⚠️ Shortcut blocked! Please enter a real word or phrase (min 6 chars).")
+        else:
+            ciphertext_2 = vigenere_encrypt(user_plaintext_2, SECRET_VIGENERE_KEY)
+            st.info(f"**Ciphertext Output:** `{ciphertext_2}`")
         
-    # Verification section
     st.divider()
     student_guess_2 = st.text_input("Think you found the key? Enter the keyword (ALL CAPS):")
     if st.button("Verify Vigenère Key"):
         if student_guess_2.strip().upper() == SECRET_VIGENERE_KEY:
-            st.success("🏆 Brilliant! You successfully broke the Vigenère cipher!")
+            st.success("🏆 Brilliant! You broke the Vigenère cipher!")
         else:
-            st.error("❌ Incorrect keyword. Try entering strings of repeated letters (like 'AAAAA') to spot patterns!")
+            st.error("❌ Incorrect keyword.")
