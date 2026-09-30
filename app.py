@@ -136,7 +136,7 @@ tab1, tab2, tab3, tab4 = st.tabs([
 with tab1:
     st.subheader("Challenge 1: Playfair Geometry Map")
     p_id = st.selectbox("Select Challenge ID:", ["P1", "P2", "P3", "P4", "P5"], key="p_sel")
-    user_text_p = st.text_input("Plaintext:", value="PROBINGTHEGRID", key="p_in")
+    user_text_p = st.text_input("Plaintext:", value="EXAMPLE", key="p_in")
     
     if user_text_p:
         try:
@@ -161,7 +161,7 @@ with tab3:
     st.subheader("Challenge 3: Row Transposition Key Matrix")
     t_id = st.selectbox("Select Challenge ID:", ["T1", "T2", "T3", "T4", "T5"], key="t_sel")
     user_text_t = st.text_input("Plaintext (Exactly 28 alphabetic characters required):", 
-                                value="ABCDEFGHIJKLMNOPQRSTUVWXYZAB", max_chars=28, key="t_in")
+                                value="CYBR", max_chars=28, key="t_in")
     
     clean_t = "".join([c for c in user_text_t if c.isalpha()])
     if len(clean_t) == 28:
@@ -176,7 +176,7 @@ with tab3:
 with tab4:
     st.subheader("Challenge 4: Vigenère Autokey Key Stream")
     v_id = st.selectbox("Select Challenge ID:", ["V1", "V2", "V3", "V4", "V5"], key="v_sel")
-    user_text_v = st.text_input("Plaintext:", value="AAAAAAAAAAAAAAAAAAAA", key="v_in")
+    user_text_v = st.text_input("Plaintext:", value="EXAMPLLAB", key="v_in")
     
     if user_text_v:
         try:
