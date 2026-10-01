@@ -1,6 +1,6 @@
 import streamlit as st
 
-st.set_page_config(page_title="Cryptographic Lab Oracle", layout="wide")
+st.set_page_config(page_title="CYBR 470: Cryptography - Lab Exercise 01: Classical Ciphers", layout="wide")
 st.title("Cryptographic Lab Oracle")
 
 # -------------------------------------------------------------
