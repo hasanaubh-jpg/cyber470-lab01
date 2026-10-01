@@ -1,7 +1,7 @@
 import streamlit as st
 
 st.set_page_config(page_title="CYBR 470: Cryptography - Lab Exercise 01: Classical Ciphers", layout="wide")
-st.title("CYBR 470: Cryptography - Lab Exercise 01: Classical Ciphers")
+st.title("CYBR 470: Cryptography<br>Lab Exercise 01: Classical Ciphers")
 
 # -------------------------------------------------------------
 # CORE ALGORITHMS
